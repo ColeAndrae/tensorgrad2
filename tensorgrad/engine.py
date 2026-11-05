@@ -20,6 +20,16 @@ class Tensor:
 
         return out
 
+    def __mul__(self, other):
+            out = Tensor(self.data * other.data, (self, other))
+    
+            def _backward():
+                self.grad += unbroadcast(out.grad * other.data, self.grad)
+                other.grad += unbroadcast(out.grad * self.data, other.grad)
+            out._backward = _backward
+    
+            return out
+
     def backward(self, R=None):
         topo = []
         visited = set()
