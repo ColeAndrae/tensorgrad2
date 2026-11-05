@@ -1,0 +1,12 @@
+[project]
+name = "tensorgrad"
+version = "0.0.1"
+requires-python = ">=3.12"
+dependencies = ["numpy"]
+
+[project.optional-dependencies]
+test = ["pytest", "torch"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
