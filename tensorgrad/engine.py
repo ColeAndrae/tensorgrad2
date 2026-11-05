@@ -14,8 +14,8 @@ class Tensor:
         out = Tensor(self.data + other.data, (self, other))
 
         def _backward():
-            self.grad += out.grad
-            other.grad += out.grad
+            self.grad += unbroadcast(out.grad, self.grad)
+            other.grad += unbroadcast(out.grad, other.grad)
         out._backward = _backward
 
         return out
@@ -37,6 +37,17 @@ class Tensor:
         for node in reversed(topo):
             node._backward()
 
-
     def __repr__(self):
-        return f'{self.data}'
+            return f'{self.data}'
+
+
+def unbroadcast(input, target):
+    target_shape = target.shape
+
+    while len(target.shape) < len(input.shape):
+        target = np.expand_dims(target, axis=0)
+    for axis, dim in enumerate(target.shape):
+        if dim == 1:
+            input = np.sum(input, axis=axis, keepdims=True)
+
+    return input.reshape(target_shape)

@@ -1,7 +1,7 @@
 import numpy as np
 
-
 from tensorgrad.engine import Tensor
+
 
 def gradcheck(f, inputs):
     inputs = [Tensor(input.data.astype(np.float64)) for input in inputs]
