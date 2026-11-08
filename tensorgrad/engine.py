@@ -43,19 +43,17 @@ class Tensor:
         return self + -other
 
     def __pow__(self, other):
-        out = Tensor(self.data ** other.data, (self, other))
+        out = Tensor(self.data ** other, (self,))
 
         def _backward():
-            self_grad = other.data * self.data ** (other.data - 1) * out.grad
-            other_grad =  self.data ** other.data * np.log(self.data) * out.grad
+            self_grad = other * self.data ** (other - 1) * out.grad
             self.grad += unbroadcast(self_grad, self.grad)
-            other.grad += unbroadcast(other_grad, other.grad)
         out._backward = _backward
 
         return out
 
     def __truediv__(self, other):
-        return self * (other ** Tensor(np.array([-1])))
+        return self * (other ** -1)
 
     def backward(self, R=None):
         topo = []
@@ -69,7 +67,7 @@ class Tensor:
                 topo_sort(child)
             topo.append(node)
 
-        self.grad = self.grad if R is None else R
+        self.grad = np.ones(self.shape) if R is None else R
         topo_sort(self)
         for node in reversed(topo):
             node._backward()

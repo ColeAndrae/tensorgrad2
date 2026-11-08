@@ -14,52 +14,49 @@ SHAPES = [[(3, 2), (3, 2)],
 
 def test_add():
     for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
-        B = Tensor(np.random.rand(*shape_B))
+        A = Tensor(np.random.randn(*shape_A))
+        B = Tensor(np.random.randn(*shape_B))
         gradcheck(lambda a, b: a + b, [A, B])
     for shape_A, shape_B in SHAPES:
-            A = Tensor(np.random.rand(*shape_A))
+            A = Tensor(np.random.randn(*shape_A))
             gradcheck(lambda a : a + a, [A])
 
 def test_mul():
     for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
-        B = Tensor(np.random.rand(*shape_B))
+        A = Tensor(np.random.randn(*shape_A))
+        B = Tensor(np.random.randn(*shape_B))
         gradcheck(lambda a, b: a * b, [A, B])
     for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
+        A = Tensor(np.random.randn(*shape_A))
         gradcheck(lambda a : a * a, [A])
 
 def test_neg():
     for shape_A, _ in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
+        A = Tensor(np.random.randn(*shape_A))
         gradcheck(lambda a : -a, [A])
 
 def test_sub():
     for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
-        B = Tensor(np.random.rand(*shape_B))
+        A = Tensor(np.random.randn(*shape_A))
+        B = Tensor(np.random.randn(*shape_B))
         gradcheck(lambda a, b: a - b, [A, B])
     for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
+        A = Tensor(np.random.randn(*shape_A))
         gradcheck(lambda a : a - a, [A])
 
 def test_pow():
-    for shape_A, shape_B in SHAPES:
+    for shape_A, _ in SHAPES:
         A = Tensor(np.random.rand(*shape_A))
-        B = Tensor(np.random.rand(*shape_B))
-        gradcheck(lambda a, b: a ** b, [A, B])
-    for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
-        gradcheck(lambda a : a ** a, [A])
+        gradcheck(lambda a : a ** 3, [A])
+        gradcheck(lambda a : a ** -1.5, [A])
 
 def test_truediv():
     for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
-        B = Tensor(np.random.rand(*shape_B))
+        A = Tensor(np.random.randn(*shape_A))
+        B = Tensor(np.random.randn(*shape_B))
         gradcheck(lambda a, b: a / b, [A, B])
     for shape_A, shape_B in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
+        A = Tensor(np.random.randn(*shape_A))
         gradcheck(lambda a : a / a, [A])
 
         
