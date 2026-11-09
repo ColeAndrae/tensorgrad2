@@ -1,6 +1,6 @@
 import numpy as np
 
-from tensorgrad import Tensor, gradcheck, unbroadcast
+from tensorgrad import Tensor, gradcheck
 
 
 SHAPES = [[(3, 2), (3, 2)],
@@ -11,6 +11,7 @@ SHAPES = [[(3, 2), (3, 2)],
           [(2, 1), (3, 2, 1)],
           [(3, 2, 1), (2, 1)],
           [(1, 3), (2, 1)]]
+
 
 def test_add():
     for shape_A, shape_B in SHAPES:
@@ -46,8 +47,9 @@ def test_sub():
 
 def test_pow():
     for shape_A, _ in SHAPES:
-        A = Tensor(np.random.rand(*shape_A))
+        A = Tensor(np.random.randn(*shape_A))
         gradcheck(lambda a : a ** 3, [A])
+        A = Tensor(np.random.rand(*shape_A))
         gradcheck(lambda a : a ** -1.5, [A])
 
 def test_truediv():
