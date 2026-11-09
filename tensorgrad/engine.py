@@ -55,6 +55,16 @@ class Tensor:
     def __truediv__(self, other):
         return self * (other ** -1)
 
+    def __matmul__(self, other):
+        out = Tensor(self.data @ other.data, (self, other))
+
+        def _backward():
+            self.grad += unbroadcast(out.grad @ other.data.T, self.grad)
+            other.grad += unbroadcast(self.data.T @ out.grad, other.grad)
+        out._backward = _backward
+
+        return out
+
     def backward(self, R=None):
         topo = []
         visited = set()
