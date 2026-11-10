@@ -104,6 +104,15 @@ class Tensor:
 
         return out
 
+    def relu(self):
+        out = Tensor(np.maximum(0, self.data), (self,))
+
+        def _backward():
+            self.grad += (out.data > 0) * out.grad
+        out._backward = _backward
+
+        return out
+
     def backward(self, R=None):
         topo = []
         visited = set()

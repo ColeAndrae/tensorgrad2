@@ -96,3 +96,8 @@ def test_log():
     for shape_A, _ in SHAPES:
         A = Tensor(np.random.rand(*shape_A) + 0.5)
         gradcheck(lambda a : a.log(), [A])
+
+def test_relu():
+    for shape_A, _ in SHAPES:
+        A = Tensor(np.random.randn(*shape_A))
+        gradcheck(lambda a : a.relu(), [A])
