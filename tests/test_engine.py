@@ -78,4 +78,9 @@ def test_sum():
         A = Tensor(np.random.randn(*shape_A))
         for dim in range(len(A.shape)):
             gradcheck(lambda a : a.sum(dim), [A])
-        
+
+def test_mean():
+    for shape_A, _ in MATMUL_SHAPES:
+        A = Tensor(np.random.randn(*shape_A))
+        for dim in range(len(A.shape)):
+            gradcheck(lambda a : a.mean(dim), [A])
