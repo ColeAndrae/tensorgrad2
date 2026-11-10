@@ -15,6 +15,7 @@ SHAPES = [[(3, 2), (3, 2)],
 MATMUL_SHAPES = [[(3, 2), (2, 3)],
                  [(2, 3), (3, 2)],
                  [(2, 1), (1, 4)],
+                 [(3, 3), (3, 3)],
                  [(1, 3), (3, 9)]]
 
 
@@ -72,4 +73,9 @@ def test_matmul():
         B = Tensor(np.random.randn(*shape_B))
         gradcheck(lambda a, b: a @ b, [A, B])
 
+def test_sum():
+    for shape_A, _ in MATMUL_SHAPES:
+        A = Tensor(np.random.randn(*shape_A))
+        for dim in range(len(A.shape)):
+            gradcheck(lambda a : a.sum(dim), [A])
         

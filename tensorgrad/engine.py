@@ -65,6 +65,15 @@ class Tensor:
 
         return out
 
+    def sum(self, dim=0):
+        out = Tensor(self.data.sum(dim), (self,))
+
+        def _backward():
+            self.grad += np.expand_dims(out.grad, dim)
+        out._backward = _backward
+ 
+        return out
+
     def backward(self, R=None):
         topo = []
         visited = set()
