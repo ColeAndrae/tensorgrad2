@@ -86,6 +86,24 @@ class Tensor:
 
         return out
 
+    def exp(self):
+        out = Tensor(np.exp(self.data), (self,))
+
+        def _backward():
+            self.grad += out.data * out.grad
+        out._backward = _backward
+
+        return out
+
+    def log(self):
+        out = Tensor(np.log(self.data), (self,))
+        
+        def _backward():
+            self.grad += 1 / self.data * out.grad
+        out._backward = _backward
+
+        return out
+
     def backward(self, R=None):
         topo = []
         visited = set()

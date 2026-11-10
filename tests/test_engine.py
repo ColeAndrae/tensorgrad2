@@ -86,3 +86,13 @@ def test_mean():
         for dim in range(len(A.shape)):
             gradcheck(lambda a : a.mean(dim), [A])
         gradcheck(lambda a : a.mean(), [A])
+
+def test_exp():
+    for shape_A, _ in SHAPES:
+        A = Tensor(np.random.randn(*shape_A))
+        gradcheck(lambda a : a.exp(), [A])
+
+def test_log():
+    for shape_A, _ in SHAPES:
+        A = Tensor(np.random.rand(*shape_A) + 0.5)
+        gradcheck(lambda a : a.log(), [A])
