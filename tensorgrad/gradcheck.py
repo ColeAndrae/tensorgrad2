@@ -6,7 +6,7 @@ from tensorgrad.engine import Tensor
 def gradcheck(f, inputs):
     inputs = [Tensor(input.data.astype(np.float64)) for input in inputs]
     out = f(*inputs)
-    R = np.random.rand(*out.shape)
+    R = np.random.randn(*out.shape)
     out.backward(R)
 
     EPS = 1e-6
