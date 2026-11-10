@@ -74,13 +74,15 @@ def test_matmul():
         gradcheck(lambda a, b: a @ b, [A, B])
 
 def test_sum():
-    for shape_A, _ in MATMUL_SHAPES:
+    for shape_A, _ in SHAPES:
         A = Tensor(np.random.randn(*shape_A))
         for dim in range(len(A.shape)):
             gradcheck(lambda a : a.sum(dim), [A])
+        gradcheck(lambda a : a.sum(), [A])
 
 def test_mean():
-    for shape_A, _ in MATMUL_SHAPES:
+    for shape_A, _ in SHAPES:
         A = Tensor(np.random.randn(*shape_A))
         for dim in range(len(A.shape)):
             gradcheck(lambda a : a.mean(dim), [A])
+        gradcheck(lambda a : a.mean(), [A])

@@ -65,20 +65,23 @@ class Tensor:
 
         return out
 
-    def sum(self, dim=0):
+    def sum(self, dim=None):
         out = Tensor(self.data.sum(dim), (self,))
 
         def _backward():
-            self.grad += np.expand_dims(out.grad, dim)
+            self.grad += out.grad if dim is None else np.expand_dims(out.grad, dim) 
         out._backward = _backward
  
         return out
 
-    def mean(self, dim=0):
+    def mean(self, dim=None):
         out = Tensor(self.data.mean(dim), (self,))
 
         def _backward():
-            self.grad += np.expand_dims(out.grad, dim) * (np.ones(self.shape) / self.shape[dim])
+            if dim is None:
+                self.grad += out.grad / self.grad.size
+            else:
+                self.grad += np.expand_dims(out.grad, dim) / self.shape[dim] 
         out._backward = _backward
 
         return out
