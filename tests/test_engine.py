@@ -101,3 +101,9 @@ def test_relu():
     for shape_A, _ in SHAPES:
         A = Tensor(np.random.randn(*shape_A))
         gradcheck(lambda a : a.relu(), [A])
+
+def test_softmax():
+    for shape_A, _ in SHAPES:
+        A = Tensor(np.random.randn(*shape_A))
+        for dim in range(len(A.shape)):
+            gradcheck(lambda a : a.softmax(dim), [A])

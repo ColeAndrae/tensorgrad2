@@ -113,6 +113,16 @@ class Tensor:
 
         return out
 
+    def softmax(self, dim=0):
+        normal_sum = np.expand_dims(np.exp(self.data).sum(dim), dim)
+        out = Tensor(np.exp(self.data) / normal_sum, (self,))
+
+        def _backward():
+            self.grad += out.data * (out.grad - np.sum(out.data * out.grad, axis=dim, keepdims=True))
+        out._backward = _backward
+
+        return out
+
     def backward(self, R=None):
         topo = []
         visited = set()
