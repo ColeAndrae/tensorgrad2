@@ -18,6 +18,11 @@ MATMUL_SHAPES = [[(3, 2), (2, 3)],
                  [(3, 3), (3, 3)],
                  [(1, 3), (3, 9)]]
 
+CROSS_ENTROPY_SHAPES = [(3, 2),
+                        (2, 3),
+                        (3, 3),
+                        (9, 3)]
+
 
 def test_add():
     for shape_A, shape_B in SHAPES:
@@ -107,3 +112,11 @@ def test_softmax():
         A = Tensor(np.random.randn(*shape_A))
         for dim in range(len(A.shape)):
             gradcheck(lambda a : a.softmax(dim), [A])
+        gradcheck(lambda a : a.softmax(), [A])
+
+def test_cross_entropy():
+    for shape_A in CROSS_ENTROPY_SHAPES:
+        A = Tensor(np.random.randn(*shape_A))
+        N, C = shape_A
+        b = np.eye(C)[np.random.randint(C, size=N)]
+        gradcheck(lambda a : a.cross_entropy(b), [A])

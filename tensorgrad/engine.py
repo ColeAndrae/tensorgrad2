@@ -9,6 +9,7 @@ class Tensor:
         self.grad = np.zeros(data.shape)
         self._backward = lambda : None
         self.shape = data.shape
+        self.size = data.size
 
     def __add__(self, other):
         out = Tensor(self.data + other.data, (self, other))
@@ -113,12 +114,23 @@ class Tensor:
 
         return out
 
-    def softmax(self, dim=0):
+    def softmax(self, dim=-1):
         normal_sum = np.expand_dims(np.exp(self.data).sum(dim), dim)
         out = Tensor(np.exp(self.data) / normal_sum, (self,))
 
         def _backward():
             self.grad += out.data * (out.grad - np.sum(out.data * out.grad, axis=dim, keepdims=True))
+        out._backward = _backward
+
+        return out
+
+    def cross_entropy(self, y):
+        m = self.data.max(-1, keepdims=True)
+        lse = m + np.log(np.sum(np.exp(self.data - m), -1, keepdims=True))
+        out = Tensor((lse - np.sum(self.data * y, -1, keepdims=True)).mean(), (self,))
+
+        def _backward():
+            self.grad += (np.exp(self.data - lse) - y) / self.shape[0] * out.grad
         out._backward = _backward
 
         return out
