@@ -18,10 +18,12 @@ MATMUL_SHAPES = [[(3, 2), (2, 3)],
                  [(3, 3), (3, 3)],
                  [(1, 3), (3, 9)]]
 
-CROSS_ENTROPY_SHAPES = [(3, 2),
+CROSS_ENTROPY_SHAPES = [(1, 10),
                         (2, 3),
                         (3, 3),
-                        (9, 3)]
+                        (9, 3),
+                        (8, 10),
+                        (1000, 5)]
 
 
 def test_add():
