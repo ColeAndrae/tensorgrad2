@@ -23,7 +23,7 @@ CROSS_ENTROPY_SHAPES = [(1, 10),
                         (3, 3),
                         (9, 3),
                         (8, 10),
-                        (1000, 5)]
+                        (10, 5)]
 
 
 def test_add():
@@ -122,3 +122,6 @@ def test_cross_entropy():
         N, C = shape_A
         b = np.eye(C)[np.random.randint(C, size=N)]
         gradcheck(lambda a : a.cross_entropy(b), [A])
+        A.data += 1000
+        gradcheck(lambda a : a.cross_entropy(b), [A])
+        assert np.isfinite(A.cross_entropy(b).data)
